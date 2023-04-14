@@ -1,0 +1,43 @@
+{
+  "name": "backdrop_test",
+  "version": "1.0.0",
+  "description": "An interview test for backdrop",
+  "main": "index.js",
+  "scripts": {
+    "test": "test",
+    "start:dev": "npx nodemon src/index.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@apollo/server": "^4.6.0",
+    "apollo-server-express": "^3.12.0",
+    "axios": "^1.3.5",
+    "bcryptjs": "^2.4.3",
+    "compression": "^1.7.4",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-graphql": "^0.12.0",
+    "graphql": "^16.6.0",
+    "helmet": "^6.0.1",
+    "joi": "^17.9.1",
+    "jsonwebtoken": "^9.0.0",
+    "nodemon": "^2.0.22",
+    "pg": "8.3.0",
+    "pg-hstore": "2.3.3",
+    "pg-promise": "10.9.1",
+    "rimraf": "^4.4.1",
+    "sequelize": "^6.3.3",
+    "typescript": "^5.0.3"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
+    "@types/bcryptjs": "^2.4.2",
+    "@types/compression": "^1.7.2",
+    "@types/cors": "^2.8.13",
+    "@types/express": "^4.17.17",
+    "@types/jsonwebtoken": "^9.0.1",
+    "ts-node": "^10.9.1"
+  }
+}
