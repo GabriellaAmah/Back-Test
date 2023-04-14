@@ -1,9 +1,9 @@
 import { UserService } from "../services/user";
-import { IUser } from "../lib/interface";
+import { IControllerResponse, IUser, IUserController, VerifyUserType } from "../lib/interface";
 import { UserLoginType, UserVerificationType } from "../lib/type";
 import { produceError } from "../helpers/error";
 
-class UserController {
+class UserController implements IUserController {
     private service: UserService;
 
     constructor({
@@ -13,7 +13,7 @@ class UserController {
     }
 
 
-    async create(values: IUser) {
+    async create(values: IUser): Promise<IControllerResponse | any> {
         try {
             const data = await this.service.create(values)
             return { message: "User created successfully", status: 201, data }
@@ -22,7 +22,7 @@ class UserController {
         }
     }
 
-    async login(values: UserLoginType) {
+    async login(values: UserLoginType): Promise<IControllerResponse | any> {
         try {
             const data = await this.service.login(values)
             return { message: "User sign in successful", status: 200, data }
@@ -31,7 +31,7 @@ class UserController {
         }
     }
 
-    async verify(values: UserVerificationType, context: any) {
+    async verify(values: VerifyUserType, context: any): Promise<IControllerResponse | any> {
         try {
             if (!context.user) return produceError(401, "User not authenticated")
 
@@ -43,4 +43,4 @@ class UserController {
     }
 }
 
-export const userController = new UserController
+export const userController = new UserController()

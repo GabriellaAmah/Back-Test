@@ -1,7 +1,8 @@
 import * as axios from "axios";
 import { PAYSTACK_SECRET_KEY, PAYSTACK_BASE_URL } from "../../config"
+import { IPaystackService } from "../../lib/interface";
 
-export class PayStackIntegrationService {
+export class PayStackIntegrationService implements IPaystackService {
     private axiosManager: any
 
     constructor({

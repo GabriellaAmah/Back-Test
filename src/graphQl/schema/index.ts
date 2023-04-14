@@ -18,7 +18,7 @@ export const typeDefs = `#graphql
     }
 
     type UserVerifyData {
-        tatus: String,
+        status: String,
         message: String,
         data: User
     }

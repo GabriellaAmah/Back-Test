@@ -1,30 +1,28 @@
 import { Sequelize } from "sequelize"
 import { DatabaseInitialization } from "../lib/type/db"
-import { POSTGRES_URL } from "../config"
+import { POSTGRES_URL, TEST_POSTGRES_URL } from "../config"
 
 export class SetupDatabaseConnection {
-    private isTest: boolean
     private url: string
     private static sequelize: Sequelize
+    private isTest: boolean
 
     constructor({ isTest = false, url }: DatabaseInitialization) {
         this.isTest = isTest
         this.url = url
 
-        this.connect()
+        Promise.resolve(this.connect())
     }
 
     async connect(): Promise<Sequelize> {
         try {
-            if (this.isTest) {
+            const sequelize = new Sequelize(this.url, {logging: false})
 
-            }
-            const sequelize = new Sequelize(this.url)
             SetupDatabaseConnection.sequelize = sequelize
 
             await this.testDbConnection()
 
-            await sequelize.sync({ alter: true })
+            await SetupDatabaseConnection.sequelize.sync({ alter: true })
 
             return SetupDatabaseConnection.sequelize
 
@@ -48,4 +46,4 @@ export class SetupDatabaseConnection {
     }
 }
 
-export const db = new SetupDatabaseConnection({ url: POSTGRES_URL })
+export const db = new SetupDatabaseConnection({ url: process.env.NODE_ENV === "test" ? TEST_POSTGRES_URL : POSTGRES_URL, isTest: process.env.NODE_ENV === "test" ? true : false })

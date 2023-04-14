@@ -12,32 +12,36 @@ import { db } from './db/dbConnection';
 import { authService } from './services/middleware/auth.service';
 
 const app = express();
-const httpServer = http.createServer(app);
+export const httpServer = http.createServer(app);
 
 
 // Set up Apollo Server
-const server = new ApolloServer({
+export const server = new ApolloServer({
   typeDefs,
   resolvers,
   plugins: [ApolloServerPluginDrainHttpServer({ httpServer })]
 });
 
+export function setupApp(server: any){
+  return app.use(
+    "/graphql",
+    cors(),
+    bodyParser.json(),
+    expressMiddleware(server, {
+      context: async ({ req }) => authService.authenticateUser({ req })
+    }),
+  );
+}
+
 async function initServer() {
   try {
     await server.start();
 
-    app.use(
-      "/graphql",
-      cors(),
-      bodyParser.json(),
-      expressMiddleware(server, {
-        context: async ({ req }) => authService.authenticateUser({ req })
-      }),
-    );
+    setupApp(server)
 
     await db.getConnection()
 
-    httpServer.listen(PORT, () => console.log(`🚀 Server ready at http://localhost:${PORT}`));
+    httpServer.listen(PORT, () => console.log(`🚀 Server ready at ${PORT}`));
   } catch (error) {
     console.log("A fatal server error")
     process.exit()
