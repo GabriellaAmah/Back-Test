@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
+import { IPasswordManger } from "../../lib/interface";
 
-export class PasswordManagerService {
+export class PasswordManagerService  implements IPasswordManger{
     private hashingManager: any
 
     constructor({

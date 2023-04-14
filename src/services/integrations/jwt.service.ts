@@ -1,7 +1,8 @@
 import * as jwt from "jsonwebtoken";
 import { JWT_SECRET_KET } from "../../config"
+import { IJwtService } from "../../lib/interface";
 
-export class JwtService {
+export class JwtService implements IJwtService {
     private jwtTokenManger: any
 
     constructor({

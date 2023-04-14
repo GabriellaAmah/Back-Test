@@ -2,14 +2,17 @@ import { UserRepository } from "../../models/user";
 import { Request } from "express"
 import { JwtService } from "../integrations/jwt.service";
 import { produceError } from "../../helpers/error";
+import { IAuthService } from "../../lib/interface";
 
-class AuthService {
+class AuthService implements IAuthService{
     userRepo: UserRepository;
     private jwtTokenManager: JwtService
 
     constructor(
-        { userRepo = new UserRepository(),
-            jwtTokenManager = new JwtService() } = {}
+        {
+            userRepo = new UserRepository(),
+            jwtTokenManager = new JwtService()
+        } = {}
     ) {
         this.userRepo = userRepo
         this.jwtTokenManager = jwtTokenManager
@@ -32,15 +35,6 @@ class AuthService {
             return { user };
         } catch (err) {
             return err
-        }
-    }
-
-    checkIsUserValid({ parent, args, context }: { parent: any, args: any, context: any }, cb: any) {
-        try {
-            if (!context.user) return produceError(401, "User not authenticated")
-            return cb()
-        } catch (error) {
-            return error
         }
     }
 }

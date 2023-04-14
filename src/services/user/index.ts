@@ -1,14 +1,15 @@
 import { levensteinDistance } from "../../helpers";
 import { produceError } from "../../helpers/error";
-import { IUser, IUserModel } from "../../lib/interface";
+import { IUser, IUserModel, IUserService, UserAuthResponse, VerifyUserType } from "../../lib/interface";
 import { UserLoginType, UserVerificationType } from "../../lib/type";
 import { OptionalQuery } from "../../lib/type/db";
 import { UserRepository } from "../../models/user";
 import { PasswordManagerService } from "../integrations/bcrypt.service";
 import { JwtService } from "../integrations/jwt.service";
 import { PayStackIntegrationService } from "../integrations/paystack.service";
+import * as _ from "lodash";
 
-export class UserService {
+export class UserService implements IUserService{
     private repo: UserRepository;
     private hashingManager: PasswordManagerService;
     private jwtTokenManager: JwtService;
@@ -35,7 +36,7 @@ export class UserService {
         }
     }
 
-    async create(values: IUser) {
+    async create(values: IUser): Promise<UserAuthResponse | any> {
         try {
             const emailExist = await this.getUserByQuery({ email: values.email })
             if (emailExist) {
@@ -51,7 +52,7 @@ export class UserService {
         }
     }
 
-    async login(values: UserLoginType) {
+    async login(values: UserLoginType): Promise<UserAuthResponse | any> {
         const emailExist = await this.getUserByQuery({ email: values.email })
         if (!emailExist) {
             throw produceError(404, "invalid email or password")
@@ -64,7 +65,7 @@ export class UserService {
         return { user: emailExist, token }
     }
 
-    async verifyUser(values: UserVerificationType) {
+    async verifyUser(values: VerifyUserType): Promise<VerifyUserType | any> {
         const { user, user_account_number, user_bank_code, user_account_name } = values
         if (user.is_verified) return produceError(429, "User cannot be verified twice")
 
@@ -73,12 +74,12 @@ export class UserService {
 
         if (user_account_name) {
             const validatedName = await this.validateUsernameLogic(user_account_name, userBankDetails.data.account_name)
-            if (validatedName) await this.repo.update({ id: user.id }, { is_verified: true, full_name: user_account_name })
+            if (validatedName) await this.repo.update({ id: user.id }, { is_verified: true, full_name: user_account_name.toLocaleLowerCase() })
         } else {
-            await this.repo.update({ id: user.id }, { is_verified: true, full_name: userBankDetails.data.account_name })
+            await this.repo.update({ id: user.id }, { is_verified: true, full_name: userBankDetails.data.account_name.toLocaleLowerCase() })
         }
 
-        return user
+        return await this.getUserByQuery({id: user.id})
     }
 
     async validateUsernameLogic(userFullname: string, userBankName: string): Promise<boolean> {
