@@ -1,0 +1,9 @@
+In 100 words or less, provide an answer to this in your readme: What's a good reason why  the pure Levenshtein Distance algorithm might be a more 
+effective solution than the broader Damerau–Levenshtein Distance algorithm in this specific scenario. 
+
+ANSWER
+Because we are trying to get the maximum number (2) of edits that can be made to a string. taking into account the three possible ways insertions, 
+deletions or substitutions, of single characters. the pure Levenshtein Distance algorithm is considered best for this 
+functionality or use case is its original design. broader Damerau–Levenshtein Distance algorithm considers only misspellings 
+that could be corrected with at most one (1) edit operation and also the ability to account for transposition of two adjacent characters, as a possible step.
+
