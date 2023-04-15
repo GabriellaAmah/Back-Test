@@ -1,4 +1,4 @@
-import { userController } from "../../controller/user.controller"
+import { userController } from "../../controller"
 import { authService } from "../../services/middleware/auth.service"
 
 

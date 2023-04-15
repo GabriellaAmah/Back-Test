@@ -4,8 +4,8 @@ import { JwtService } from "../integrations/jwt.service";
 import { produceError } from "../../helpers/error";
 import { IAuthService } from "../../lib/interface";
 
-class AuthService implements IAuthService{
-    userRepo: UserRepository;
+export class AuthService implements IAuthService{
+    private userRepo: UserRepository;
     private jwtTokenManager: JwtService
 
     constructor(

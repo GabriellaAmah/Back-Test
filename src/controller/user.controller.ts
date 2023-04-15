@@ -3,12 +3,12 @@ import { IControllerResponse, IUser, IUserController, VerifyUserType } from "../
 import { UserLoginType, UserVerificationType } from "../lib/type";
 import { produceError } from "../helpers/error";
 
-class UserController implements IUserController {
-    private service: UserService;
+export class UserController implements IUserController {
+    private service: any;
 
     constructor({
         service = new UserService(),
-    } = {}) {
+    }: any = {}) {
         this.service = service
     }
 
@@ -43,4 +43,4 @@ class UserController implements IUserController {
     }
 }
 
-export const userController = new UserController()
+//export const userController = new UserController()
