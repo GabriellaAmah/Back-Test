@@ -25,7 +25,7 @@ const createUser = async (password: string, email: string) => {
   return response.data.addUser.data ? response.data.addUser.data.token : null
 }
 
-describe("test user", () => {
+describe("User E2E", () => {
   beforeAll(async () => {
     process.env.NODE_ENV = "test"
     try {
@@ -186,7 +186,7 @@ describe("test user", () => {
   
       let response: any =  await request(url).post("/graphql").set('Authorization', 'Bearer ' + token).send(queryData);
       response = JSON.parse(response.text)
-      
+
       expect(response.errors[0].message).toBe("User cannot be verified twice")
     })
   
